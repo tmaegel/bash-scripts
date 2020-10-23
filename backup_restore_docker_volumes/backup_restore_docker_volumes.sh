@@ -24,10 +24,6 @@ function show_usage() {
   return 0
 }
 
-if [ $# -eq 0 ]; then
-  show_usage
-fi
-
 while [ -n "$1" ]; do
   case $1 in
     --volume-prefix|-vp)
@@ -55,16 +51,19 @@ while [ -n "$1" ]; do
     ;;
     *)
       show_usage
+      exit 0
     ;;
   esac
   shift
 done
 
 if [ -z "$VOLUME_PREFIX" ]; then
+  show_usage
   echo "ERROR: Missing -vp, --volume-prefix option."
   exit 1
 fi
 if [ -z "$APP_VERSION_NEW" ]; then
+  show_usage
   echo "ERROR: Missing -vn, --version-new option."
   exit 1
 fi
