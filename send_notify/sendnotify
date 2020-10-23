@@ -27,11 +27,6 @@ function show_usage() {
   return 0
 }
 
-# Required at least 4 parameters
-if [ $# -lt 4 ]; then
-  show_usage
-fi
-
 while [ -n "$1" ]; do
   case $1 in
     --user|-u)
@@ -51,10 +46,12 @@ while [ -n "$1" ]; do
 done
 
 if [ -z "$SESSION_USER" ]; then
+  show_usage
   echo "ERROR: Missing -u, --user option."
   exit 1
 fi
 if [ -z "$MESSAGE" ]; then
+  show_usage
   echo "ERROR: Missing -m, --message option."
   exit 1
 fi
