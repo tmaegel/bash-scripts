@@ -24,6 +24,11 @@ function show_usage() {
   return 0
 }
 
+if [ $# -eq 0 ]; then
+  show_usage
+  exit 0
+fi
+
 while [ -n "$1" ]; do
   case $1 in
     --volume-prefix|-vp)
@@ -50,8 +55,9 @@ while [ -n "$1" ]; do
       fi
     ;;
     *)
+      echo "ERROR: Invalid option."
       show_usage
-      exit 0
+      exit 1
     ;;
   esac
   shift
