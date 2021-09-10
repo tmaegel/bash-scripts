@@ -5,7 +5,7 @@
 # PREFIX_VOL_VERSION
 # PREFIX=nextcloud, VOL=data, VERSION=19
 # e.g. nextcloud_data_19
-VOLUMES_BACKUP=("data" "db" "apps" "config")
+VOLUMES_BACKUP=("data" "db" "apps" "config" "customapps")
 BACKUP_DIR="./backup"
 
 BACKUP=0
