@@ -20,6 +20,7 @@ function show_usage() {
   printf "\n"
   printf "Options:\n"
   printf "%s\t%s\t\t%s\n" "  -u" "--user" "Username of current session"
+  printf "%s\t%s\t%s\n" "  -p" "--process" "Main process"
   printf "%s\t%s\t%s\n" "  -m" "--message" "Specifies the notification text"
   printf "%s\t%s\t\t%s\n" "  -h" "--help" "Print help"
   printf "\n"
@@ -27,36 +28,40 @@ function show_usage() {
   return 0
 }
 
-while [ -n "$1" ]; do
+while [[ -n $1 ]]; do
   case $1 in
-    --user|-u)
+    --user | -u)
       shift
       SESSION_USER="$1"
-    ;;
-    --message|-m)
+      ;;
+    --message | -m)
       shift
       MESSAGE="$1"
-    ;;
+      ;;
+    --process | -p)
+      shift
+      MAIN_PROCESS="$1"
+      ;;
     *)
       show_usage
       exit 0
-    ;;
+      ;;
   esac
   shift
 done
 
-if [ -z "$MESSAGE" ] || [ -z "$SESSION_USER" ]; then
+if [[ -z ${MESSAGE} ]] || [[ -z ${SESSION_USER} ]]; then
   show_usage
   echo "ERROR: Missing -u, --user or -m, --message option."
   exit 1
 fi
 
-pid=$(pgrep -x -u "$SESSION_USER" "$MAIN_PROCESS")
-if [ -n "$pid" ]; then
-  dbus=$(sed 's/\o0/\n/g' < "/proc/$pid/environ" | grep "DBUS_SESSION_BUS_ADDRESS" | sed 's/DBUS_SESSION_BUS_ADDRESS=//')
-  export DBUS_SESSION_BUS_ADDRESS=$dbus
+pid=$(pgrep -x -u "${SESSION_USER}" "${MAIN_PROCESS}")
+if [[ -n ${pid} ]]; then
+  dbus=$(sed 's/\o0/\n/g' < "/proc/${pid}/environ" | grep "DBUS_SESSION_BUS_ADDRESS" | sed 's/DBUS_SESSION_BUS_ADDRESS=//')
+  export DBUS_SESSION_BUS_ADDRESS="${dbus}"
 
-  /usr/bin/notify-send "$MESSAGE"
+  /usr/bin/notify-send "${MESSAGE}"
 fi
 
 exit 0
